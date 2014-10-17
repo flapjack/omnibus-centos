@@ -1,30 +1,37 @@
-FROM stackbrew/ubuntu:precise
+FROM centos:centos6
 MAINTAINER Jesse Reynolds @jessereynolds
+# Original author: Derek Olsen in https://github.com/someword/omnibus-centos
 
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    build-essential \
-    ruby1.9.1-full \
-    libssl-dev \
-    libreadline-dev \
-    libxslt1-dev \
-    libxml2-dev \
-    libcurl4-openssl-dev \
-    zlib1g-dev \
-    libexpat1-dev \
-    libicu-dev
+#RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
+RUN rpm -ivh http://download.fedoraproject.org/pub/epel/6/$(arch)/epel-release-6-8.noarch.rpm
+RUN yum install -y centos-release-SCL
+RUN yum groupinstall -y 'Development Tools'
+
+RUN yum install -y \
+    openssl-devel \
+    expat-devel \
+    perl-ExtUtils-MakeMaker \
+    curl-devel \
+    golang \
+    ruby193 \
+    ruby193-ruby-devel
+
+# Work around git/go version issues on centos - https://twitter.com/gniemeyer/status/472318780472045568
+RUN yum remove -y git
+
+RUN cd /usr/src && \
+    curl -o git-1.9.4.tar.gz https://www.kernel.org/pub/software/scm/git/git-1.9.4.tar.gz && \
+    tar xzf git-1.9.4.tar.gz && cd git-1.9.4 && \
+    make prefix=/usr all && make prefix=/usr install
+
+RUN echo "export PATH=\${PATH}:/opt/rh/ruby193/root/usr/local/bin" | tee -a /opt/rh/ruby193/enable
+RUN source /opt/rh/ruby193/enable
+
+RUN cp /opt/rh/ruby193/enable /etc/profile.d/ruby193.sh
 
 RUN git config --global user.email "docker@flapjack.io" && \
     git config --global user.name "Flapjack Docker Packager"
 
-RUN gem install bundler --no-ri --no-rdoc
-
-RUN curl -o /tmp/go1.3.1.linux-amd64.tar.gz https://storage.googleapis.com/golang/go1.3.1.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf /tmp/go1.3.1.linux-amd64.tar.gz && \
-    echo "PATH=$PATH:/usr/local/go/bin" | tee /etc/profile.d/go.sh
-
-RUN git clone https://github.com/flapjack/omnibus-flapjack.git && \
-    cd omnibus-flapjack && \
-    bundle install --binstubs
+RUN /bin/bash -l -c "git clone https://github.com/flapjack/omnibus-flapjack.git && cd omnibus-flapjack && bundle install --binstubs"
 
