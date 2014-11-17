@@ -34,5 +34,5 @@ RUN cp /opt/rh/ruby193/enable /etc/profile.d/ruby193.sh
 RUN git config --global user.email "docker@flapjack.io" && \
     git config --global user.name "Flapjack Docker Packager"
 
-RUN /bin/bash -l -c "git clone https://github.com/flapjack/omnibus-flapjack.git && cd omnibus-flapjack && git checkout omnibus4 && && bundle install --binstubs"
+RUN /bin/bash -l -c "git clone https://github.com/flapjack/omnibus-flapjack.git && cd omnibus-flapjack && git checkout omnibus4 && bundle install --binstubs"
 
