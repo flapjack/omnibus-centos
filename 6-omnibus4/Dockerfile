@@ -16,7 +16,8 @@ RUN yum install -y \
     golang \
     ruby193 \
     ruby193-ruby-devel \
-    tar
+    tar \
+    fakeroot
 
 # Work around git/go version issues on centos - https://twitter.com/gniemeyer/status/472318780472045568
 RUN yum remove -y git
