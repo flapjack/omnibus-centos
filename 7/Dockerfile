@@ -5,7 +5,7 @@ MAINTAINER Jesse Reynolds @jessereynolds
 #RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 RUN rpm -ivh http://download.fedoraproject.org/pub/epel/7/$(arch)/e/epel-release-7-5.noarch.rpm
-RUN yum install -y centos-release-SCL
+#RUN yum install -y centos-release-SCL
 RUN yum groupinstall -y 'Development Tools'
 
 RUN yum install -y \
@@ -17,8 +17,7 @@ RUN yum install -y \
     ruby193 \
     ruby193-ruby-devel \
     tar \
-    fakeroot \
-    mysql-devel
+    fakeroot
 
 # Work around git/go version issues on centos - https://twitter.com/gniemeyer/status/472318780472045568
 RUN yum remove -y git

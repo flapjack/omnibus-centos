@@ -17,8 +17,7 @@ RUN yum install -y \
     ruby193 \
     ruby193-ruby-devel \
     tar \
-    fakeroot \
-    mysql-devel
+    fakeroot
 
 # Work around git/go version issues on centos - https://twitter.com/gniemeyer/status/472318780472045568
 RUN yum remove -y git
