@@ -27,7 +27,7 @@ RUN cd /usr/src && \
     curl -o git-1.9.4.tar.gz https://www.kernel.org/pub/software/scm/git/git-1.9.4.tar.gz && \
     tar xzf git-1.9.4.tar.gz && cd git-1.9.4 && \
     make prefix=/usr all && make prefix=/usr install && \
-    cd .. && rm -r git-1.9.4.tar.gz git-1.9.4
+    cd .. && rm -rf git-1.9.4.tar.gz git-1.9.4
 
 RUN echo "export PATH=\${PATH}:/opt/rh/ruby193/root/usr/local/bin" | tee -a /opt/rh/ruby193/enable
 RUN source /opt/rh/ruby193/enable
